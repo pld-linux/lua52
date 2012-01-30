@@ -1,6 +1,7 @@
+#
 # Conditional build:
 %bcond_with	luastatic        # build dietlibc-based static lua version (broken)
-#
+
 Summary:	A simple lightweight powerful embeddable programming language
 Summary(pl.UTF-8):	Prosty, lekki ale potężny, osadzalny język programowania
 Name:		lua52
@@ -45,15 +46,15 @@ konfiguracji, skryptów i szybkich prototypów.
 Ta wersja ma wkompilowaną obsługę ładowania dynamicznych bibliotek.
 
 %package libs
-Summary:	lua 5.1.x libraries
-Summary(pl.UTF-8):	Biblioteki lua 5.1.x
-Group:		Development/Languages
+Summary:	lua 5.2.x libraries
+Summary(pl.UTF-8):	Biblioteki lua 5.2.x
+Group:		Libraries
 
 %description libs
-lua 5.1.x libraries.
+lua 5.2.x libraries.
 
 %description libs -l pl.UTF-8
-Biblioteki lua 5.1.x.
+Biblioteki lua 5.2.x.
 
 %package devel
 Summary:	Header files for Lua
