@@ -5,12 +5,13 @@
 Summary:	A simple lightweight powerful embeddable programming language
 Summary(pl.UTF-8):	Prosty, lekki ale potężny, osadzalny język programowania
 Name:		lua52
-Version:	5.2.0
+Version:	5.2.1
 Release:	0.1
 License:	MIT
 Group:		Development/Languages
 Source0:	http://www.lua.org/ftp/lua-%{version}.tar.gz
-# Source0-md5:	f1ea831f397214bae8a265995ab1a93e
+# Source0-md5:	ae08f641b45d737d12d30291a5e5f6e3
+Patch0:		%{name}-link.patch
 URL:		http://www.lua.org/
 %{?with_luastatic:BuildRequires:       dietlibc-static}
 BuildRequires:	readline-devel
@@ -97,8 +98,10 @@ Statycznie skonsolidowany interpreter lua.
 
 %prep
 %setup -q -n lua-%{version}
-sed -r -i 's|(#define LUA_ROOT.*)%{_prefix}/local/|\1%{_prefix}/|g' src/luaconf.h
-sed -r -i 's|(#define LUA_CDIR.*)lib/|\1%{_lib}/|g' src/luaconf.h
+%patch0 -p1
+
+sed -i  -e '/#define LUA_ROOT/s,/usr/local/,%{_prefix}/,' \
+	-e '/#define LUA_CDIR/s,lib/lua/,%{_lib}/lua/,' src/luaconf.h
 
 %build
 %if %{with luastatic}
@@ -116,8 +119,6 @@ mv src/luac luac.static
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags} -Wall -fPIC -DPIC -D_GNU_SOURCE -DLUA_USE_LINUX"
 
-#rm -f test/{lua,luac}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/lua}
@@ -129,7 +130,7 @@ install -d $RPM_BUILD_ROOT%{_libdir}/lua}
 	INSTALL_MAN=$RPM_BUILD_ROOT%{_mandir}/man1 \
 	INSTALL_CMOD=$RPM_BUILD_ROOT%{_libdir}/lua/5.2
 
-# change name from lua to lua51
+# change name from lua to lua52
 for i in $RPM_BUILD_ROOT%{_bindir}/* ; do mv ${i}{,52} ; done
 mv $RPM_BUILD_ROOT%{_mandir}/man1/lua{,52}.1
 mv $RPM_BUILD_ROOT%{_mandir}/man1/luac{,52}.1
@@ -168,15 +169,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/lua51
-%attr(755,root,root) %{_bindir}/luac51
+%attr(755,root,root) %{_bindir}/lua52
+%attr(755,root,root) %{_bindir}/luac52
 %{_mandir}/man1/lua52.1*
 %{_mandir}/man1/luac52.1*
 
 %files libs
 %defattr(644,root,root,755)
-%doc COPYRIGHT HISTORY README
-%attr(755,root,root) %{_libdir}/liblua.so.*.*
+%doc README
+%attr(755,root,root) %{_libdir}/liblua.so.5.2
 %dir %{_libdir}/lua
 %{_libdir}/lua/5.2
 %dir %{_datadir}/lua
@@ -184,7 +185,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/*.{html,css,gif} test
+%doc doc/*.{html,css,gif,png}
 %attr(755,root,root) %{_libdir}/liblua52.so
 %{_includedir}/lua52
 %{_pkgconfigdir}/lua52.pc
@@ -196,5 +197,6 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with luastatic}
 %files luastatic
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/*.static
+%attr(755,root,root) %{_bindir}/lua52.static
+%attr(755,root,root) %{_bindir}/luac52.static
 %endif
