@@ -125,40 +125,40 @@ install -d $RPM_BUILD_ROOT%{_libdir}/lua}
 
 %{__make} install \
 	INSTALL_TOP=$RPM_BUILD_ROOT%{_prefix} \
-	INSTALL_INC=$RPM_BUILD_ROOT%{_includedir}/lua52 \
+	INSTALL_INC=$RPM_BUILD_ROOT%{_includedir}/lua5.2 \
 	INSTALL_LIB=$RPM_BUILD_ROOT%{_libdir} \
 	INSTALL_MAN=$RPM_BUILD_ROOT%{_mandir}/man1 \
 	INSTALL_CMOD=$RPM_BUILD_ROOT%{_libdir}/lua/5.2
 
 # change name from lua to lua52
-for i in $RPM_BUILD_ROOT%{_bindir}/* ; do mv ${i}{,52} ; done
-mv $RPM_BUILD_ROOT%{_mandir}/man1/lua{,52}.1
-mv $RPM_BUILD_ROOT%{_mandir}/man1/luac{,52}.1
-mv $RPM_BUILD_ROOT%{_libdir}/liblua{,52}.a
+for i in $RPM_BUILD_ROOT%{_bindir}/* ; do mv ${i}{,5.2} ; done
+mv $RPM_BUILD_ROOT%{_mandir}/man1/lua{,5.2}.1
+mv $RPM_BUILD_ROOT%{_mandir}/man1/luac{,5.2}.1
+mv $RPM_BUILD_ROOT%{_libdir}/liblua{,5.2}.a
 
 install src/liblua.so.5.2 $RPM_BUILD_ROOT%{_libdir}
-ln -s liblua.so.5.2 $RPM_BUILD_ROOT%{_libdir}/liblua52.so
+ln -s liblua.so.5.2 $RPM_BUILD_ROOT%{_libdir}/liblua5.2.so
 
 %if %{with luastatic}
-install lua.static $RPM_BUILD_ROOT%{_bindir}/lua52.static
-install luac.static $RPM_BUILD_ROOT%{_bindir}/luac52.static
+install lua.static $RPM_BUILD_ROOT%{_bindir}/lua5.2.static
+install luac.static $RPM_BUILD_ROOT%{_bindir}/luac5.2.static
 %endif
 
 # create pkgconfig file
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
-cat > $RPM_BUILD_ROOT%{_pkgconfigdir}/lua52.pc <<'EOF'
+cat > $RPM_BUILD_ROOT%{_pkgconfigdir}/lua5.2.pc <<'EOF'
 prefix=%{_prefix}
 exec_prefix=%{_exec_prefix}
-includedir=%{_includedir}/%{name}
+includedir=%{_includedir}/lua5.2
 libdir=%{_libdir}
-interpreter=%{_bindir}/lua52
-compiler=%{_bindir}/luac52
+interpreter=%{_bindir}/lua5.2
+compiler=%{_bindir}/luac5.2
 
 Name: Lua
 Description: An extension programming language
 Version: %{version}
-Cflags: -I%{_includedir}/%{name}
-Libs: -L%{_libdir} -llua52 -ldl -lm
+Cflags: -I${includedir}
+Libs: -L${libdir} -llua5.2 -ldl -lm
 EOF
 
 %clean
@@ -169,10 +169,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/lua52
-%attr(755,root,root) %{_bindir}/luac52
-%{_mandir}/man1/lua52.1*
-%{_mandir}/man1/luac52.1*
+%attr(755,root,root) %{_bindir}/lua5.2
+%attr(755,root,root) %{_bindir}/luac5.2
+%{_mandir}/man1/lua5.2.1*
+%{_mandir}/man1/luac5.2.1*
 
 %files libs
 %defattr(644,root,root,755)
@@ -186,17 +186,17 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*.{html,css,gif,png}
-%attr(755,root,root) %{_libdir}/liblua52.so
-%{_includedir}/lua52
-%{_pkgconfigdir}/lua52.pc
+%attr(755,root,root) %{_libdir}/liblua5.2.so
+%{_includedir}/lua5.2
+%{_pkgconfigdir}/lua5.2.pc
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/liblua52.a
+%{_libdir}/liblua5.2.a
 
 %if %{with luastatic}
 %files luastatic
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/lua52.static
-%attr(755,root,root) %{_bindir}/luac52.static
+%attr(755,root,root) %{_bindir}/lua5.2.static
+%attr(755,root,root) %{_bindir}/luac5.2.static
 %endif
