@@ -7,7 +7,7 @@ Summary:	A simple lightweight powerful embeddable programming language
 Summary(pl.UTF-8):	Prosty, lekki ale potężny, osadzalny język programowania
 Name:		lua52
 Version:	5.2.3
-Release:	2
+Release:	3
 License:	MIT
 Group:		Development/Languages
 Source0:	http://www.lua.org/ftp/lua-%{version}.tar.gz
@@ -120,7 +120,7 @@ sed -i  -e '/#define LUA_ROOT/s,/usr/local/,%{_prefix}/,' \
 %{__make} all \
 	PLAT=posix \
 	CC="diet %{__cc}" \
-	CFLAGS="%{rpmcflags} -Wall -fPIC -Os -DPIC -D_GNU_SOURCE -DLUA_USE_POSIX"
+	CFLAGS="%{rpmcflags} -Wall -fPIC -Os -DPIC -D_GNU_SOURCE -DLUA_USE_POSIX -DLUA_COMPAT_ALL"
 mv src/lua lua.static
 mv src/luac luac.static
 %{__make} clean
@@ -129,7 +129,7 @@ mv src/luac luac.static
 %{__make} -j1 all \
 	PLAT=linux \
 	CC="%{__cc}" \
-	CFLAGS="%{rpmcflags} -Wall -fPIC -DPIC -D_GNU_SOURCE -DLUA_USE_LINUX"
+	CFLAGS="%{rpmcflags} -Wall -fPIC -DPIC -D_GNU_SOURCE -DLUA_USE_LINUX -DLUA_COMPAT_ALL"
 
 %install
 rm -rf $RPM_BUILD_ROOT
